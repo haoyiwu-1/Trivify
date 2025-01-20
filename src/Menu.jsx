@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 
-function Menu() {
+function Menu({ onSubmit }) {
   const questionCountArray = [...Array(50).keys()].map((i) =>
     (i + 1).toString()
   );
@@ -53,10 +53,6 @@ function Menu() {
     },
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
-  };
-
   return (
     <Container>
       <Typography variant="h3" sx={{ textAlign: "center", pt: 2 }}>
@@ -74,7 +70,9 @@ function Menu() {
           <Controller
             name="questionAmount"
             control={control}
-            rules={{ required: "Choose between 1 and 50 questions." }}
+            rules={{
+              required: "Choose between 1 and 50 questions.",
+            }}
             render={({ field }) => (
               <Autocomplete
                 sx={{ width: 300 }}
@@ -97,7 +95,7 @@ function Menu() {
           <Controller
             name="Category"
             control={control}
-            rules={{ required: "You must pick a category." }}
+            rules={{ required: "You must select a category." }}
             render={({ field }) => (
               <Autocomplete
                 sx={{ width: 300 }}
