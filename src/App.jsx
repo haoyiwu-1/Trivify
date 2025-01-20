@@ -1,5 +1,7 @@
+import Menu from "./Menu.jsx";
+
 function App() {
-  return <></>;
+  return <Menu />;
 }
 
 export default App;
