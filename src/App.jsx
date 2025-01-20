@@ -1,12 +1,15 @@
 import Menu from "./Menu.jsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Quiz from "./Quiz.jsx";
 
 function App() {
-  const [formData, setFormData] = useState(null);
   const [apiResponse, setApiResponse] = useState(null);
+  const [showMenu, setShowMenu] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const handleFormSubmit = (data) => {
-    setFormData(data);
+    setShowMenu(false);
+    setLoading(true);
 
     const questionAmount = data.questionAmount;
     const category = data.Category;
@@ -48,17 +51,39 @@ function App() {
     }
 
     const getQuestions = async () => {
-      const result = await fetch(url);
-      const data = await result.json();
-      setApiResponse(data);
+      try {
+        const result = await fetch(url);
+        const data = await result.json();
+        setApiResponse(data);
+      } catch (error) {
+      } finally {
+        setLoading(false);
+      }
     };
 
     getQuestions();
   };
 
+  const handleBackToMenu = () => {
+    setShowMenu(true);
+    setApiResponse(null);
+  };
+
+  useEffect(() => {
+    if (apiResponse !== null) {
+      console.log(apiResponse);
+    }
+  }, [apiResponse]);
+
   return (
     <div className="flex items-center justify-center h-screen">
-      <Menu onSubmit={handleFormSubmit} />
+      {showMenu ? (
+        <Menu onSubmit={handleFormSubmit} />
+      ) : loading ? (
+        <div></div>
+      ) : (
+        <Quiz data={apiResponse} onBackToMenu={handleBackToMenu} />
+      )}
     </div>
   );
 }

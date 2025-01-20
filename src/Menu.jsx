@@ -10,7 +10,7 @@ import { useForm, Controller } from "react-hook-form";
 
 function Menu({ onSubmit }) {
   const questionCountArray = [...Array(50).keys()].map((i) =>
-    (i + 1).toString()
+    (i + 1).toString(),
   );
   const categories = [
     "Any Category",
