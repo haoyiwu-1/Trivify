@@ -1,13 +1,8 @@
 import { Container, Box, Button } from "@mui/material";
 
-function Quiz({ data, onBackToMenu }) {
-  const randomizeChoices = (array) => {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-  };
+import Question from "./Question";
 
+function Quiz({ data, onBackToMenu }) {
   if (!data || !data.results) {
     return (
       <Container>
@@ -37,7 +32,13 @@ function Quiz({ data, onBackToMenu }) {
   }
 
   return (
-    <Container>
+    <Container
+      maxWidth="false"
+      sx={{
+        maxHeight: "100vh",
+        overflowY: "auto",
+      }}
+    >
       <Box
         display="flex"
         flexDirection="column"
@@ -45,7 +46,11 @@ function Quiz({ data, onBackToMenu }) {
         alignItems="center"
         alignSelf="center"
         textAlign="center"
+        gap={2}
       >
+        {data.results.map((questionData, index) => (
+          <Question key={index} data={questionData} />
+        ))}
         <Button variant="contained" sx={{ width: 300 }} onClick={onBackToMenu}>
           Back to Menu
         </Button>
