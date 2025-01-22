@@ -3,11 +3,49 @@ import {
   KeyboardArrowLeft as KeyboardArrowLeftIcon,
   KeyboardArrowRight as KeyboardArrowRightIcon,
 } from "@mui/icons-material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Question from "./Question";
 
 function Quiz({ data, onBackToMenu }) {
   const [questionIndex, setQuestionIndex] = useState(0);
+  const [userAnswers, setUserAnswers] = useState(
+    Array(data.results.length).fill(null)
+  );
+  const [correctAnswers, setCorrectAnswers] = useState(0);
+  const [shuffledQuestions, setShuffledQuestions] = useState([]);
+
+  useEffect(() => {
+    if (
+      data?.results &&
+      data.results.length > 0 &&
+      shuffledQuestions.length === 0
+    ) {
+      const shuffledData = data.results.map((question) => {
+        const answerList = [
+          question.correct_answer,
+          ...question.incorrect_answers,
+        ];
+        const shuffledAnswers = shuffleArray(answerList);
+        return {
+          ...question,
+          answers: shuffledAnswers,
+        };
+      });
+      setShuffledQuestions(shuffledData);
+    }
+  }, [data, shuffledQuestions]);
+
+  const shuffleArray = (array) => {
+    let shuffledArray = [...array];
+    for (let i = shuffledArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffledArray[i], shuffledArray[j]] = [
+        shuffledArray[j],
+        shuffledArray[i],
+      ];
+    }
+    return shuffledArray;
+  };
 
   const handleNextQuestion = () => {
     if (questionIndex < data.results.length - 1) {
@@ -21,7 +59,31 @@ function Quiz({ data, onBackToMenu }) {
     }
   };
 
-  if (!data || !data.results) {
+  const handleAnswerSelection = (
+    selectedAnswer,
+    correctAnswer,
+    questionIndex
+  ) => {
+    const wasAnsweredCorrectly = userAnswers[questionIndex] === correctAnswer;
+    const isNowCorrect = selectedAnswer === correctAnswer;
+
+    setUserAnswers((prev) =>
+      prev.map((answer, idx) =>
+        idx === questionIndex ? selectedAnswer : answer
+      )
+    );
+
+    setCorrectAnswers((prev) => {
+      if (wasAnsweredCorrectly && !isNowCorrect) {
+        return prev - 1;
+      } else if (!wasAnsweredCorrectly && isNowCorrect) {
+        return prev + 1;
+      }
+      return prev;
+    });
+  };
+
+  if (!data?.results || shuffledQuestions.length === 0) {
     return (
       <Container sx={{ overflowY: "auto", maxHeight: "100vh" }}>
         <Box
@@ -87,7 +149,10 @@ function Quiz({ data, onBackToMenu }) {
               <Typography variant="h5">Question {questionIndex + 1}</Typography>
               <Question
                 key={questionIndex}
-                data={data.results[questionIndex]}
+                data={shuffledQuestions[questionIndex]}
+                userAnswers={userAnswers}
+                questionIndex={questionIndex}
+                handleAnswerSelection={handleAnswerSelection}
               />
             </Box>
           </Box>

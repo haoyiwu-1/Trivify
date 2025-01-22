@@ -71,7 +71,6 @@ function App() {
 
   useEffect(() => {
     if (apiResponse !== null) {
-      console.log(apiResponse);
     }
   }, [apiResponse]);
 

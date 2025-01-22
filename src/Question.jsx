@@ -1,23 +1,6 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Typography,
-  CardActions,
-} from "@mui/material";
+import { Box, Button, Card, CardContent, Typography } from "@mui/material";
 
-function Question({ data }) {
-  const randomizeChoices = (array) => {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-  };
-
-  const answerList = [data.correct_answer, ...data.incorrect_answers];
-  randomizeChoices(answerList);
-
+function Question({ data, userAnswers, questionIndex, handleAnswerSelection }) {
   return (
     <Box
       display="flex"
@@ -37,11 +20,20 @@ function Question({ data }) {
           }
         </Typography>
         <CardContent>
-          {answerList.map((answer, index) => (
+          {data.answers.map((answer, index) => (
             <Button
               sx={{ m: 1, flex: 1, xs: "12px", sm: "20px" }}
               key={index}
-              variant="outlined"
+              variant={
+                userAnswers[questionIndex] === answer ? "contained" : "outlined"
+              }
+              onClick={() =>
+                handleAnswerSelection(
+                  answer,
+                  data.correct_answer,
+                  questionIndex
+                )
+              }
             >
               {String.fromCharCode(65 + index)}.{" "}
               {
