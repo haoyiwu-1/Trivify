@@ -5,9 +5,9 @@ import {
   Typography,
   TextField,
   Button,
-  Popper,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
+import { useState, useEffect } from "react";
 
 function Menu({ onSubmit }) {
   const questionCountArray = [...Array(50).keys()].map((i) =>
@@ -41,6 +41,7 @@ function Menu({ onSubmit }) {
     "Entertainment: Cartoon & Animations",
   ];
   const difficulties = ["Easy", "Medium", "Hard"];
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const {
     handleSubmit,
@@ -53,6 +54,18 @@ function Menu({ onSubmit }) {
       Difficulty: "Easy",
     },
   });
+
+  useEffect(() => {
+    if (isDropdownOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isDropdownOpen]);
 
   return (
     <Container>
@@ -89,15 +102,10 @@ function Menu({ onSubmit }) {
                   />
                 )}
                 onChange={(_, value) => field.onChange(value)}
+                onOpen={() => setIsDropdownOpen(true)}
+                onClose={() => setIsDropdownOpen(false)}
               />
             )}
-          />
-
-          <Autocomplete
-            disablePortal
-            options={questionCountArray}
-            sx={{ width: 300 }}
-            renderInput={(params) => <TextField {...params} label="Test" />}
           />
 
           <Controller
