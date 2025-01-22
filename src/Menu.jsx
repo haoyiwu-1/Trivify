@@ -103,19 +103,6 @@ function Menu({ onSubmit }) {
                 sx={{ width: 300 }}
                 {...field}
                 options={categories}
-                slots={{
-                  popper: (props) => (
-                    <Popper
-                      {...props}
-                      sx={{
-                        maxHeight: "50vh",
-                        overflowY: "auto",
-                        width: 300,
-                        position: "absolute",
-                      }}
-                    />
-                  ),
-                }}
                 renderInput={(params) => (
                   <TextField
                     {...params}
