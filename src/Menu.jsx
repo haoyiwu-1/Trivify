@@ -68,7 +68,7 @@ function Menu({ onSubmit }) {
   }, [isDropdownOpen]);
 
   return (
-    <Container>
+    <Container sx={{ maxHeight: "100vh" }}>
       <Typography variant="h3" sx={{ textAlign: "center", pt: 2 }}>
         Trivify
       </Typography>
@@ -127,6 +127,8 @@ function Menu({ onSubmit }) {
                   />
                 )}
                 onChange={(_, value) => field.onChange(value)}
+                onOpen={() => setIsDropdownOpen(true)}
+                onClose={() => setIsDropdownOpen(false)}
               />
             )}
           />
@@ -149,6 +151,8 @@ function Menu({ onSubmit }) {
                   />
                 )}
                 onChange={(_, value) => field.onChange(value)}
+                onOpen={() => setIsDropdownOpen(true)}
+                onClose={() => setIsDropdownOpen(false)}
               />
             )}
           />
