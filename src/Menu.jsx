@@ -93,6 +93,13 @@ function Menu({ onSubmit }) {
             )}
           />
 
+          <Autocomplete
+            disablePortal
+            options={questionCountArray}
+            sx={{ width: 300 }}
+            renderInput={(params) => <TextField {...params} label="Test" />}
+          />
+
           <Controller
             name="Category"
             control={control}
