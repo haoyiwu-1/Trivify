@@ -10,7 +10,7 @@ import { useForm, Controller } from "react-hook-form";
 
 function Menu({ onSubmit }) {
   const questionCountArray = [...Array(50).keys()].map((i) =>
-    (i + 1).toString(),
+    (i + 1).toString()
   );
   const categories = [
     "Any Category",
@@ -98,7 +98,14 @@ function Menu({ onSubmit }) {
             rules={{ required: "You must select a category." }}
             render={({ field }) => (
               <Autocomplete
-                sx={{ width: 300 }}
+                disablePortal
+                sx={{
+                  width: 300,
+                  "& .MuiAutocomplete-listbox": {
+                    maxHeight: "50vh",
+                    overflowY: "auto",
+                  },
+                }}
                 {...field}
                 options={categories}
                 renderInput={(params) => (
