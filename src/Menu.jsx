@@ -5,6 +5,7 @@ import {
   Typography,
   TextField,
   Button,
+  Popper,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 
@@ -99,15 +100,22 @@ function Menu({ onSubmit }) {
             render={({ field }) => (
               <Autocomplete
                 disablePortal
-                sx={{
-                  width: 300,
-                  "& .MuiAutocomplete-listbox": {
-                    maxHeight: "50vh",
-                    overflowY: "auto",
-                  },
-                }}
+                sx={{ width: 300 }}
                 {...field}
                 options={categories}
+                slots={{
+                  popper: (props) => (
+                    <Popper
+                      {...props}
+                      sx={{
+                        maxHeight: "50vh",
+                        overflowY: "auto",
+                        width: 300,
+                        position: "absolute",
+                      }}
+                    />
+                  ),
+                }}
                 renderInput={(params) => (
                   <TextField
                     {...params}
