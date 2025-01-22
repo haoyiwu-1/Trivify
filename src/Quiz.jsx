@@ -13,6 +13,8 @@ function Quiz({ data, onBackToMenu }) {
   );
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [shuffledQuestions, setShuffledQuestions] = useState([]);
+  const [quizComplete, setQuizComplete] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(true);
 
   useEffect(() => {
     if (
@@ -50,12 +52,14 @@ function Quiz({ data, onBackToMenu }) {
   const handleNextQuestion = () => {
     if (questionIndex < data.results.length - 1) {
       setQuestionIndex((prevIndex) => prevIndex + 1);
+      setIsFormValid(true);
     }
   };
 
   const handlePreviousQuestion = () => {
     if (questionIndex > 0) {
       setQuestionIndex((currentIndex) => currentIndex - 1);
+      setIsFormValid(true);
     }
   };
 
@@ -81,6 +85,16 @@ function Quiz({ data, onBackToMenu }) {
       }
       return prev;
     });
+    setIsFormValid(true);
+  };
+
+  const handleQuizSubmit = () => {
+    if (userAnswers.every((answer) => answer !== null)) {
+      setIsFormValid(true);
+      setQuizComplete(true);
+    } else {
+      setIsFormValid(false);
+    }
   };
 
   if (!data?.results || shuffledQuestions.length === 0) {
@@ -99,6 +113,35 @@ function Quiz({ data, onBackToMenu }) {
           gap={2}
         >
           No data available. The API is experiencing issues.
+          <Button
+            variant="contained"
+            sx={{ width: 300 }}
+            onClick={onBackToMenu}
+          >
+            Back to Menu
+          </Button>
+        </Box>
+      </Container>
+    );
+  }
+
+  if (quizComplete) {
+    return (
+      <Container sx={{ overflowY: "auto", maxHeight: "100vh" }}>
+        <Box
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+          alignSelf="center"
+          textAlign="center"
+          gap={3}
+        >
+          <Typography variant="h4">Quiz Completed!</Typography>
+          <Typography variant="h5">
+            You answered {correctAnswers} out of {data.results.length} questions
+            correctly!
+          </Typography>
           <Button
             variant="contained"
             sx={{ width: 300 }}
@@ -168,6 +211,20 @@ function Quiz({ data, onBackToMenu }) {
             </Button>
           )}
         </Box>
+        {questionIndex === data.results.length - 1 && (
+          <Button
+            variant="contained"
+            sx={{ width: 300, bgcolor: "red" }}
+            onClick={handleQuizSubmit}
+          >
+            Submit Quiz
+          </Button>
+        )}
+        {!isFormValid && (
+          <Typography color="error" variant="body1">
+            Please answer all questions before submitting.
+          </Typography>
+        )}
         <Button variant="contained" sx={{ width: 300 }} onClick={onBackToMenu}>
           Back to Menu
         </Button>
