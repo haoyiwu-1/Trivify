@@ -135,13 +135,61 @@ function Quiz({ data, onBackToMenu }) {
           alignItems="center"
           alignSelf="center"
           textAlign="center"
-          gap={3}
+          gap={2}
+          sx={{ my: 2 }}
         >
           <Typography variant="h4">Quiz Completed!</Typography>
+
           <Typography variant="h5">
             You answered {correctAnswers} out of {data.results.length} questions
             correctly!
           </Typography>
+          <Box>
+            <Typography variant="h4">Answer List</Typography>
+            <Box
+              sx={{
+                border: "2px solid black",
+                height: "50vh",
+                overflowY: "auto",
+              }}
+            >
+              {userAnswers.map((answer, index) => {
+                const correctAnswer = shuffledQuestions[index].correct_answer;
+                const questionText = shuffledQuestions[index].question;
+                return (
+                  <Box key={index} sx={{ my: 2, mx: 1 }}>
+                    <Typography variant="h6">Question {index + 1}</Typography>
+                    <Typography variant="h6">
+                      {
+                        new DOMParser().parseFromString(
+                          questionText,
+                          "text/html"
+                        ).body.innerHTML
+                      }
+                    </Typography>
+                    <Typography
+                      color={answer === correctAnswer ? "green" : "red"}
+                    >
+                      Your Answer:{" "}
+                      {
+                        new DOMParser().parseFromString(answer, "text/html")
+                          .body.innerHTML
+                      }
+                    </Typography>
+                    <Typography color="green">
+                      Correct Answer:{" "}
+                      {
+                        new DOMParser().parseFromString(
+                          correctAnswer,
+                          "text/html"
+                        ).body.innerHTML
+                      }
+                    </Typography>
+                  </Box>
+                );
+              })}
+            </Box>
+          </Box>
           <Button
             variant="contained"
             sx={{ width: 300 }}
@@ -221,13 +269,19 @@ function Quiz({ data, onBackToMenu }) {
           </Button>
         )}
         {!isFormValid && (
-          <Typography color="error" variant="body1">
+          <Typography color="error" variant="body1" textAlign="center">
             Please answer all questions before submitting.
           </Typography>
         )}
-        <Button variant="contained" sx={{ width: 300 }} onClick={onBackToMenu}>
-          Back to Menu
-        </Button>
+        {questionIndex < data.results.length - 1 && (
+          <Button
+            variant="contained"
+            sx={{ width: 300 }}
+            onClick={onBackToMenu}
+          >
+            Quit Quiz
+          </Button>
+        )}
       </Box>
     </Container>
   );
