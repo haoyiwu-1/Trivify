@@ -1,13 +1,15 @@
 import {
-  Autocomplete,
   Box,
   Container,
   Typography,
-  TextField,
   Button,
+  Select,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  FormHelperText,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
-import { useState, useEffect } from "react";
 
 function Menu({ onSubmit }) {
   const questionCountArray = [...Array(50).keys()].map((i) =>
@@ -41,45 +43,31 @@ function Menu({ onSubmit }) {
     "Entertainment: Cartoon & Animations",
   ];
   const difficulties = ["Easy", "Medium", "Hard"];
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const {
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      questionAmount: 10,
-      Category: "Any Category",
-      Difficulty: "Easy",
+      questionAmount: "",
+      category: "",
+      difficulty: "",
     },
   });
-
-  const handleDropdownOpen = () => {
-    if (document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur();
-    }
-    setIsDropdownOpen(true);
-  };
-
-  useEffect(() => {
-    if (isDropdownOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [isDropdownOpen]);
 
   return (
     <Container sx={{ maxHeight: "100vh" }}>
       <Typography variant="h3" sx={{ textAlign: "center", pt: 2 }}>
         Trivify
       </Typography>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form
+        onSubmit={handleSubmit((data) => {
+          onSubmit(data);
+          reset();
+        })}
+      >
         <Box
           display="flex"
           flexDirection="column"
@@ -92,91 +80,112 @@ function Menu({ onSubmit }) {
             name="questionAmount"
             control={control}
             rules={{
-              required: "Choose between 1 and 50 questions.",
+              required: "Please select between 1 and 50 questions.",
             }}
             render={({ field }) => (
-              <Autocomplete
-                sx={{ width: 300 }}
-                {...field}
-                options={questionCountArray}
-                getOptionLabel={(option) => option.toString()}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Question Amount"
-                    error={!!errors.questionAmount}
-                    helperText={errors.questionAmount?.message}
-                  />
+              <FormControl sx={{ width: 300 }} error={!!errors.questionAmount}>
+                <InputLabel>Question Amount</InputLabel>
+                <Select
+                  value={field.value || ""}
+                  label="Question Amount"
+                  onChange={(e) => field.onChange(e.target.value)}
+                  MenuProps={{
+                    PaperProps: {
+                      sx: {
+                        maxHeight: "25vh",
+                        overflowY: "auto",
+                        width: 300,
+                      },
+                    },
+                  }}
+                >
+                  {questionCountArray.map((amount) => (
+                    <MenuItem key={amount} value={amount}>
+                      {amount}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {errors.questionAmount && (
+                  <FormHelperText>
+                    {errors.questionAmount.message}
+                  </FormHelperText>
                 )}
-                onChange={(_, value) => field.onChange(value)}
-                onOpen={() => setIsDropdownOpen(true)}
-                onClose={() => setIsDropdownOpen(false)}
-                slotProps={{
-                  listbox: {
-                    sx: {
-                      maxHeight: "50vh",
-                      overflow: "auto",
-                      backgroundColor: "lightgrey",
-                    },
-                    onTouchStart: () => {
-                      if (document.activeElement instanceof HTMLElement) {
-                        document.activeElement.blur();
-                      }
-                    },
-                  },
-                }}
-              />
+              </FormControl>
             )}
           />
 
           <Controller
-            name="Category"
+            name="category"
             control={control}
-            rules={{ required: "You must select a category." }}
+            rules={{
+              required: "Category selection is required.",
+            }}
             render={({ field }) => (
-              <Autocomplete
-                disablePortal
-                sx={{ width: 300 }}
-                {...field}
-                options={categories}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Select Category"
-                    error={!!errors.Category}
-                    helperText={errors.Category?.message}
-                  />
+              <FormControl sx={{ width: 300 }} error={!!errors.category}>
+                <InputLabel>Select Category</InputLabel>
+                <Select
+                  value={field.value || ""}
+                  label="Select Category"
+                  onChange={(e) => field.onChange(e.target.value)}
+                  MenuProps={{
+                    PaperProps: {
+                      sx: {
+                        maxHeight: "25vh",
+                        overflowY: "auto",
+                        width: 300,
+                      },
+                    },
+                  }}
+                >
+                  {categories.map((category) => (
+                    <MenuItem key={category} value={category}>
+                      {category}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {errors.category && (
+                  <FormHelperText>{errors.category.message}</FormHelperText>
                 )}
-                onChange={(_, value) => field.onChange(value)}
-                onOpen={() => setIsDropdownOpen(true)}
-                onClose={() => setIsDropdownOpen(false)}
-              />
+              </FormControl>
             )}
           />
 
           <Controller
-            name="Difficulty"
+            name="difficulty"
             control={control}
-            rules={{ required: "You must select a difficulty." }}
+            rules={{
+              required: "Difficulty selection is required.",
+            }}
             render={({ field }) => (
-              <Autocomplete
-                sx={{ width: 300 }}
-                {...field}
-                options={difficulties}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Difficulty"
-                    error={!!errors.Difficulty}
-                    helperText={errors.Difficulty?.message}
-                  />
+              <FormControl sx={{ width: 300 }} error={!!errors.difficulty}>
+                <InputLabel>Select Difficulty</InputLabel>
+                <Select
+                  value={field.value || ""}
+                  label="Select Difficulty"
+                  onChange={(e) => field.onChange(e.target.value)}
+                  MenuProps={{
+                    PaperProps: {
+                      sx: {
+                        maxHeight: "25vh",
+                        overflowY: "auto",
+                        width: 300,
+                      },
+                    },
+                  }}
+                >
+                  {difficulties.map((difficulty) => (
+                    <MenuItem key={difficulty} value={difficulty}>
+                      {difficulty}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {errors.difficulty && (
+                  <FormHelperText>{errors.difficulty.message}</FormHelperText>
                 )}
-                onChange={(_, value) => field.onChange(value)}
-                onOpen={() => setIsDropdownOpen(true)}
-                onClose={() => setIsDropdownOpen(false)}
-              />
+              </FormControl>
             )}
           />
+
           <Button variant="contained" sx={{ width: 300 }} type="submit">
             Start Quiz
           </Button>

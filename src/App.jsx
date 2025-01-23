@@ -12,8 +12,8 @@ function App() {
     setLoading(true);
 
     const questionAmount = data.questionAmount;
-    const category = data.Category;
-    const difficulty = data.Difficulty.toLowerCase();
+    const category = data.category;
+    const difficulty = data.difficulty.toLowerCase();
 
     const categoryToNumber = {
       "General Knowledge": "9",
