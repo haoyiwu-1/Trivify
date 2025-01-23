@@ -138,7 +138,11 @@ function Menu({ onSubmit }) {
                   }}
                 >
                   {categories.map((category) => (
-                    <MenuItem key={category} value={category}>
+                    <MenuItem
+                      key={category}
+                      value={category}
+                      sx={{ wordWrap: "break-word", whiteSpace: "normal" }}
+                    >
                       {category}
                     </MenuItem>
                   ))}

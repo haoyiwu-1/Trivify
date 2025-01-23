@@ -149,7 +149,7 @@ function Quiz({ data, onBackToMenu }) {
             <Box
               sx={{
                 border: "2px solid black",
-                height: "50vh",
+                maxHeight: "50vh",
                 overflowY: "auto",
               }}
             >
