@@ -109,8 +109,22 @@ function Menu({ onSubmit }) {
                   />
                 )}
                 onChange={(_, value) => field.onChange(value)}
-                onOpen={handleDropdownOpen}
+                onOpen={() => setIsDropdownOpen(true)}
                 onClose={() => setIsDropdownOpen(false)}
+                slotProps={{
+                  listbox: {
+                    sx: {
+                      maxHeight: "50vh",
+                      overflow: "auto",
+                      backgroundColor: "lightgrey",
+                    },
+                    onTouchStart: () => {
+                      if (document.activeElement instanceof HTMLElement) {
+                        document.activeElement.blur();
+                      }
+                    },
+                  },
+                }}
               />
             )}
           />
@@ -134,7 +148,7 @@ function Menu({ onSubmit }) {
                   />
                 )}
                 onChange={(_, value) => field.onChange(value)}
-                onOpen={handleDropdownOpen}
+                onOpen={() => setIsDropdownOpen(true)}
                 onClose={() => setIsDropdownOpen(false)}
               />
             )}
@@ -158,7 +172,7 @@ function Menu({ onSubmit }) {
                   />
                 )}
                 onChange={(_, value) => field.onChange(value)}
-                onOpen={handleDropdownOpen}
+                onOpen={() => setIsDropdownOpen(true)}
                 onClose={() => setIsDropdownOpen(false)}
               />
             )}
