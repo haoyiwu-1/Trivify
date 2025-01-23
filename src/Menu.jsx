@@ -55,6 +55,13 @@ function Menu({ onSubmit }) {
     },
   });
 
+  const handleDropdownOpen = () => {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    setIsDropdownOpen(true);
+  };
+
   useEffect(() => {
     if (isDropdownOpen) {
       document.body.style.overflow = "hidden";
@@ -102,7 +109,7 @@ function Menu({ onSubmit }) {
                   />
                 )}
                 onChange={(_, value) => field.onChange(value)}
-                onOpen={() => setIsDropdownOpen(true)}
+                onOpen={handleDropdownOpen}
                 onClose={() => setIsDropdownOpen(false)}
               />
             )}
@@ -127,7 +134,7 @@ function Menu({ onSubmit }) {
                   />
                 )}
                 onChange={(_, value) => field.onChange(value)}
-                onOpen={() => setIsDropdownOpen(true)}
+                onOpen={handleDropdownOpen}
                 onClose={() => setIsDropdownOpen(false)}
               />
             )}
@@ -151,7 +158,7 @@ function Menu({ onSubmit }) {
                   />
                 )}
                 onChange={(_, value) => field.onChange(value)}
-                onOpen={() => setIsDropdownOpen(true)}
+                onOpen={handleDropdownOpen}
                 onClose={() => setIsDropdownOpen(false)}
               />
             )}
