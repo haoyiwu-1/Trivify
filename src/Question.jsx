@@ -1,4 +1,5 @@
 import { Box, Button, Card, CardContent, Typography } from "@mui/material";
+import { decode } from "he";
 
 function Question({ data, userAnswers, questionIndex, handleAnswerSelection }) {
   return (
@@ -14,10 +15,7 @@ function Question({ data, userAnswers, questionIndex, handleAnswerSelection }) {
     >
       <Card sx={{ p: 2 }}>
         <Typography variant="h6" sx={{ fontSize: { xs: "12px", sm: "20px" } }}>
-          {
-            new DOMParser().parseFromString(data.question, "text/html").body
-              .innerHTML
-          }
+          {decode(data.question)}
         </Typography>
         <CardContent>
           {data.answers.map((answer, index) => (
@@ -35,11 +33,7 @@ function Question({ data, userAnswers, questionIndex, handleAnswerSelection }) {
                 )
               }
             >
-              {String.fromCharCode(65 + index)}.{" "}
-              {
-                new DOMParser().parseFromString(answer, "text/html").body
-                  .innerHTML
-              }
+              {String.fromCharCode(65 + index)}. {decode(answer)}
             </Button>
           ))}
         </CardContent>

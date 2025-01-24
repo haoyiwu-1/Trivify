@@ -5,6 +5,7 @@ import {
 } from "@mui/icons-material";
 import { useState, useEffect } from "react";
 import Question from "./Question";
+import { decode } from "he";
 
 function Quiz({ data, onBackToMenu }) {
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -159,31 +160,14 @@ function Quiz({ data, onBackToMenu }) {
                 return (
                   <Box key={index} sx={{ my: 2, mx: 1 }}>
                     <Typography variant="h6">Question {index + 1}</Typography>
-                    <Typography variant="h6">
-                      {
-                        new DOMParser().parseFromString(
-                          questionText,
-                          "text/html"
-                        ).body.innerHTML
-                      }
-                    </Typography>
+                    <Typography variant="h6">{decode(questionText)}</Typography>
                     <Typography
                       color={answer === correctAnswer ? "green" : "red"}
                     >
-                      Your Answer:{" "}
-                      {
-                        new DOMParser().parseFromString(answer, "text/html")
-                          .body.innerHTML
-                      }
+                      Your Answer: {decode(answer)}
                     </Typography>
                     <Typography color="green">
-                      Correct Answer:{" "}
-                      {
-                        new DOMParser().parseFromString(
-                          correctAnswer,
-                          "text/html"
-                        ).body.innerHTML
-                      }
+                      Correct Answer: {decode(correctAnswer)}
                     </Typography>
                   </Box>
                 );
